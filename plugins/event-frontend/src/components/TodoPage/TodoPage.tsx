@@ -1,107 +1,77 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Header, Container } from '@backstage/ui';
 
 export const TodoPage = () => {
-  const [events, setEvents] = useState<any[]>([]);
+  const [topics, setTopics] = useState<any[]>([]);
+  const [selectedTopic, setSelectedTopic] = useState<any>(null);
 
   const BASE_URL = 'http://localhost:7007/api/event-plugin';
 
-  // POST API - Send Event
-  const sendEvent = async () => {
-    console.log('Send Event clicked');
-
+  // Fetch all topics
+  const fetchTopics = async () => {
     try {
-      const res = await fetch(`${BASE_URL}/event`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: 'OrderCreated',
-          amount: 100,
-        }),
-      });
-
-      console.log('POST status:', res.status);
-
+      const res = await fetch(`${BASE_URL}/topics`);
       const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data?.message || 'Failed to send event');
-      }
-
-      console.log('POST response:', data);
-      alert('Event sent successfully');
-    } catch (error: any) {
-      console.error('Error sending event:', error);
-      alert(`Error sending event: ${error.message}`);
+      setTopics(data.data || []);
+    } catch (error) {
+      console.error('Error fetching topics:', error);
     }
   };
 
-  // GET API - Fetch Processed Events
-  const fetchEvents = async () => {
-    console.log('Fetch Events clicked');
-
+  // Fetch topic details
+  const fetchTopicDetails = async (name: string) => {
     try {
-      const res = await fetch(`${BASE_URL}/events`);
-
-      console.log('GET status:', res.status);
-
+      const res = await fetch(`${BASE_URL}/topics/${name}`);
       const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data?.message || 'Failed to fetch events');
-      }
-
-      console.log('GET response:', data);
-
-      setEvents(data.data || []);
-    } catch (error: any) {
-      console.error('Error fetching events:', error);
-      alert(`Error fetching events: ${error.message}`);
+      setSelectedTopic(data.data);
+    } catch (error) {
+      console.error('Error fetching topic details:', error);
     }
   };
+
+  useEffect(() => {
+    fetchTopics();
+  }, []);
 
   return (
     <>
-      <Header title="Event Driven Demo" />
+      <Header title="RabbitMQ Topics Dashboard" />
       <Container>
-        <div style={{ marginBottom: 20 }}>
-          <button onClick={sendEvent}>Send Event</button>
+        <div style={{ display: 'flex', gap: '20px' }}>
+          
+          {/* LEFT SIDE - Topic List */}
+          <div style={{ width: '30%' }}>
+            <h3>Topics</h3>
+            <ul>
+              {topics.map((t, i) => (
+                <li
+                  key={i}
+                  style={{ cursor: 'pointer', marginBottom: '10px' }}
+                  onClick={() => fetchTopicDetails(t.name)}
+                >
+                  {t.name}
+                </li>
+              ))}
+            </ul>
+          </div>
 
-          <button onClick={fetchEvents} style={{ marginLeft: 10 }}>
-            Fetch Events
-          </button>
-        </div>
+          {/* RIGHT SIDE - Topic Details */}
+          <div style={{ width: '70%' }}>
+            <h3>Details</h3>
 
-        <h3>Processed Events</h3>
-
-        <table border={1} cellPadding={10}>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Amount</th>
-              <th>Status</th>
-              <th>Processed Time</th>
-            </tr>
-          </thead>
-          <tbody>
-            {events.length > 0 ? (
-              events.map((e, i) => (
-                <tr key={i}>
-                  <td>{e.name}</td>
-                  <td>{e.amount}</td>
-                  <td>{e.status || 'Processed'}</td>
-                  <td>{e.processedAt || new Date().toLocaleString()}</td>
-                </tr>
-              ))
+            {selectedTopic ? (
+              <div>
+                <p><strong>Name:</strong> {selectedTopic.name}</p>
+                <p><strong>Durable:</strong> {selectedTopic.durable.toString()}</p>
+                <p><strong>Messages:</strong> {selectedTopic.messages}</p>
+                <p><strong>Consumers:</strong> {selectedTopic.consumers}</p>
+              </div>
             ) : (
-              <tr>
-                <td colSpan={4} style={{ textAlign: 'center' }}>
-                  No events found
-                </td>
-              </tr>
+              <p>Select a topic to view details</p>
             )}
-          </tbody>
-        </table>
+          </div>
+
+        </div>
       </Container>
     </>
   );

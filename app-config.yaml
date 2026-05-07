@@ -20,18 +20,31 @@ organization:
 backend:
   auth:
     dangerouslyDisableDefaultAuthPolicy: true
+
   baseUrl: http://localhost:7007
+
   listen:
     port: 7007
+
+  reading:
+    allow:
+      - host: localhost
+      - host: 127.0.0.1
+      - host: localhost:7007
+      - host: 127.0.0.1:7007
+
   csp:
     connect-src: ["'self'", 'http:', 'https:']
+
   cors:
     origin: http://localhost:3000
     methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
     credentials: true
+
   database:
     client: better-sqlite3
     connection: ':memory:'
+
   actions:
     pluginSources:
       - auth
@@ -43,22 +56,24 @@ integrations:
     - host: github.com
       token: ${GITHUB_TOKEN}
 
-# // FIXED PROXY (THIS IS THE IMPORTANT PART)
 proxy:
   '/event-plugin':
     target: 'http://localhost:7007/api/event-plugin'
     changeOrigin: true
 
 techdocs:
-  builder: 'local'
+  builder: local
+
   generator:
-    runIn: 'docker'
+    runIn: docker
+
   publisher:
-    type: 'local'
+    type: local
 
 auth:
   providers:
     guest: {}
+
   experimentalClientIdMetadataDocuments:
     enabled: false
 
@@ -68,21 +83,47 @@ catalog:
   import:
     entityFilename: catalog-info.yaml
     pullRequestBranchName: backstage-integration
+
   rules:
-    - allow: [Component, System, API, Resource, Location]
+    - allow:
+        - Component
+        - System
+        - API
+        - Resource
+        - Location
+        - User
+        - Group
+
   locations:
+
+    # Dynamic RabbitMQ topics
+    - type: url
+      target: http://127.0.0.1:7007/api/event-plugin/catalog-info.yaml
+
+      rules:
+        - allow:
+            - Resource
+
+    # Default example entities
     - type: file
       target: ../../examples/entities.yaml
 
+    # Templates
     - type: file
       target: ../../examples/template/template.yaml
-      rules:
-        - allow: [Template]
 
+      rules:
+        - allow:
+            - Template
+
+    # Users and groups
     - type: file
       target: ../../examples/org.yaml
+
       rules:
-        - allow: [User, Group]
+        - allow:
+            - User
+            - Group
 
 kubernetes:
 
@@ -90,5 +131,9 @@ permission:
   enabled: true
 
 mcpActions:
-  name: 'My Company Backstage'
-  description: 'Tools for managing your software catalog, creating new services from templates, and exploring your developer portal'
+  name: My Company Backstage
+
+  description: >
+    Tools for managing your software catalog,
+    creating new services from templates,
+    and exploring your developer portal

@@ -1,0 +1,26 @@
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: simple-api
+  namespace: apim
+  title: Simple API
+  description: A simple API with health check and greeting endpoints.
+  labels:
+    source: apim
+    environment: poc
+  annotations:
+    apim/gateway-url: https://APIMPOC23.azure-api.net
+    apim/instance: APIMPOC23
+    apim/resource-id: /subscriptions/16f681e1-fc24-4099-b1bf-14d8c63b21d8/resourceGroups/POCAPIM/providers/Microsoft.ApiManagement/service/APIMPOC23/apis/simple-api
+spec:
+  type: openapi
+  owner: api-team
+  lifecycle: experimental
+  definition: |
+    openapi: 3.0.0
+    info:
+      title: Simple API
+      version: "1.0.0"
+      description: A simple API with health check and greeting endpoints.
+    servers:
+      - url: https://APIMPOC23.azure-api.net

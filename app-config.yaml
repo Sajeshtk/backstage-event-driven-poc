@@ -16,6 +16,16 @@ app:
 
 organization:
   name: My Company
+  # ===== ADD THIS SECTION =====
+azureApim:
+  subscriptionId: ${AZURE_SUBSCRIPTION_ID}
+  resourceGroup: POCAPIM
+  serviceName: APIMPOC23
+  serviceUrl: https://apimpoc23.azure-api.net
+  clientId: ${AZURE_CLIENT_ID}
+  clientSecret: ${AZURE_CLIENT_SECRET}
+  tenantId: ${AZURE_TENANT_ID}
+# ===== END ADD =====
 
 backend:
   auth:
@@ -42,8 +52,13 @@ backend:
     credentials: true
 
   database:
-    client: better-sqlite3
-    connection: ':memory:'
+    client: pg
+    connection:
+      host: localhost
+      port: 5432
+      user: postgres
+      password: '12345678'
+      database: backstage
 
   actions:
     pluginSources:
@@ -96,6 +111,15 @@ catalog:
 
   locations:
 
+     # ===== ADD THIS LOCATION =====
+    # Azure APIM APIs
+    - type: file
+      target: ../../examples/apim-apis/*.yaml
+      rules:
+        - allow:
+            - API
+    # ===== END ADD =====
+
     # Dynamic RabbitMQ topics
     - type: url
       target: http://127.0.0.1:7007/api/event-plugin/catalog-info.yaml
@@ -128,7 +152,7 @@ catalog:
 kubernetes:
 
 permission:
-  enabled: true
+  enabled: false
 
 mcpActions:
   name: My Company Backstage

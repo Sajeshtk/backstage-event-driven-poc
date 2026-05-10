@@ -54,3 +54,11 @@ e2e-test-report/
 
 # Cache
 .cache/
+/.idea/.gitignore
+/.idea/codeStyles/codeStyleConfig.xml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/poc-combined.iml
+/.idea/prettier.xml
+/.idea/codeStyles/Project.xml
+/.idea/vcs.xml

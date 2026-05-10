@@ -52,13 +52,8 @@ backend:
     credentials: true
 
   database:
-    client: pg
-    connection:
-      host: localhost
-      port: 5432
-      user: postgres
-      password: 'postgres'
-      database: backstage
+    client: better-sqlite3
+    connection: ':memory:'
 
   actions:
     pluginSources:

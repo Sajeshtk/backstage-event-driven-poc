@@ -15,9 +15,8 @@ export async function createRouter(): Promise<express.Router> {
     password: 'guest',
   };
 
-  // =========================================================
+
   // GET all RabbitMQ topics (topic exchanges)
-  // =========================================================
   router.get('/topics', async (_req, res) => {
 
     try {
@@ -58,9 +57,8 @@ export async function createRouter(): Promise<express.Router> {
     }
   });
 
-  // =========================================================
+  
   // GET catalog compatible resources (JSON)
-  // =========================================================
   router.get('/catalog-resources', async (_req, res) => {
 
     try {
@@ -107,9 +105,8 @@ export async function createRouter(): Promise<express.Router> {
     }
   });
 
-  // =========================================================
+  
   // Dynamic catalog-info.yaml for Backstage Catalog ingestion
-  // =========================================================
   router.get('/catalog-info.yaml', async (_req, res) => {
 
     try {
@@ -152,9 +149,8 @@ spec:
     }
   });
 
-  // =========================================================
+  
   // GET topic details
-  // =========================================================
   router.get('/topics/:name', async (req, res) => {
 
     try {
@@ -192,9 +188,8 @@ spec:
     }
   });
 
-  // =========================================================
+  
   // Health endpoint
-  // =========================================================
   router.get('/health', (_req, res) => {
 
     res.json({

@@ -7,6 +7,30 @@ metadata:
 spec:
   owner: guests
 ---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: azure-apim-account-1
+  title: Azure APIM – Account 1 (Static)
+  description: APIs from the first Azure subscription (APIMPOC23 / POCAPIM), defined as static YAML catalog entries.
+  tags:
+    - apim-static
+    - apimpoc23
+spec:
+  owner: guests
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: azure-apim-account-2
+  title: Azure APIM – Account 2 (Live Sync)
+  description: APIs discovered live from the second Azure subscription (apim-poc-test) via EntityProvider, auto-refreshed every minute.
+  tags:
+    - apim-live
+    - apim-poc-test
+spec:
+  owner: guests
+---
 # https://backstage.io/docs/features/software-catalog/descriptor-format#kind-component
 apiVersion: backstage.io/v1alpha1
 kind: Component

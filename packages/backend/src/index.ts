@@ -63,4 +63,11 @@ backend.add(import('@backstage/plugin-signals-backend'));
 backend.add(import('@backstage/plugin-mcp-actions-backend'));
 
 backend.add(import('@internal/backstage-plugin-event-plugin-backend'));
+
+// Azure APIM live catalog provider (variant 2 - EntityProvider-based)
+backend.add(import('./modules/azureApimModule'));
+
+// SAP Cloud Integration catalog provider
+backend.add(import('./modules/sapCpiModule'));
+
 backend.start();

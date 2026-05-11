@@ -5,7 +5,6 @@ app:
   packages: all
 
   extensions:
-    - nav-item:search: false
     - nav-item:user-settings: false
     - nav-item:catalog: false
     - nav-item:scaffolder: false
@@ -104,6 +103,30 @@ catalog:
         - User
         - Group
 
+  # ===== VARIANT 2: Live Azure APIM EntityProvider (new subscription) =====
+  providers:
+    sapCpi:
+      tarento:
+        tokenHost: ${SAP_CPI_TOKEN_HOST}
+        tmnHost: ${SAP_CPI_TMN_HOST}
+        clientId: ${SAP_CPI_CLIENT_ID}
+        clientSecret: ${SAP_CPI_CLIENT_SECRET}
+        schedule:
+          frequency: { minutes: 1 }
+          timeout: { minutes: 2 }
+    azureApim:
+      newAccount:
+        subscriptionId: ${AZURE_NEW_SUBSCRIPTION_ID}
+        resourceGroup: ${AZURE_NEW_RESOURCE_GROUP}
+        serviceName: ${AZURE_NEW_APIM_SERVICE_NAME}
+        tenantId: ${AZURE_NEW_TENANT_ID}
+        clientId: ${AZURE_NEW_CLIENT_ID}
+        clientSecret: ${AZURE_NEW_CLIENT_SECRET}
+        schedule:
+          frequency: { minutes: 1 }
+          timeout: { minutes: 1 }
+  # ===== END VARIANT 2 =====
+
   locations:
 
      # ===== ADD THIS LOCATION =====
@@ -143,6 +166,14 @@ catalog:
         - allow:
             - User
             - Group
+
+search:
+  collators:
+    catalog:
+      schedule:
+        frequency: { minutes: 2 }
+        timeout: { minutes: 5 }
+        initialDelay: { seconds: 90 }
 
 kubernetes:
 

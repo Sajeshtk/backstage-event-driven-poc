@@ -4,10 +4,15 @@ metadata:
   name: simple-api
   namespace: apim
   title: Simple API
-  description: A simple API with health check and greeting endpoints.
+  description: Statically defined API from Azure APIM account 1 (APIMPOC23 / POCAPIM)
+  tags:
+    - apim-static
+    - apimpoc23
+    - pocapim
   labels:
-    source: apim
+    source: apim-static
     environment: poc
+    apim-instance: APIMPOC23
   annotations:
     apim/gateway-url: https://APIMPOC23.azure-api.net
     apim/instance: APIMPOC23
@@ -15,6 +20,7 @@ metadata:
 spec:
   type: openapi
   owner: api-team
+  system: azure-apim-account-1
   lifecycle: experimental
   definition: |
     openapi: 3.0.0
